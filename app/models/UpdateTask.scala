@@ -11,7 +11,6 @@ import play.api.libs.json.JodaReads._
 
 case class UpdateTask(
                        _id:Option[BSONObjectID],
-                       _updateDate: Option[DateTime],
                        done: Boolean,
                      )
 
@@ -22,7 +21,6 @@ object UpdateTask {
     def read(doc: BSONDocument): UpdateTask = {
       UpdateTask(
         doc.getAs[BSONObjectID]("_id"),
-        doc.getAs[BSONDateTime]("_updateDate").map(dt => new DateTime(dt.value)),
         doc.getAs[Boolean]("done").get
       )
     }
@@ -32,7 +30,6 @@ object UpdateTask {
     def write(task: Task): BSONDocument = {
       BSONDocument(
         "_id" -> task._id,
-        "_updateDate" -> task._updateDate.map(date => BSONDateTime(date.getMillis)),
         "done" -> task.done
       )
     }

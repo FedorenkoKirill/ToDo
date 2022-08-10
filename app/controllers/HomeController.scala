@@ -46,7 +46,7 @@ class TaskController @Inject()(
     request.body.validate[CreateTask].fold(
       _ => Future.successful(BadRequest("Cannot parse request body")),
       task =>
-        taskDAO.create(task).map {
+        taskDAO.create(Task(_id = task._id, label = task.label, done = false, deleted = false) ).map {
           _ => Created(Json.toJson(task))
         }
     )
