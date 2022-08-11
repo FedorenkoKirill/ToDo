@@ -11,9 +11,9 @@ GET     /assets/*file               controllers.Assets.versioned(path="/public",
 
 # Tasks
 GET     /tasks                controllers.TaskController.findAll()
-GET     /tasks/:id            controllers.TaskController.findOne(id: String)
+GET     /tasks/:id            controllers.TaskController.findOne(id: BSONObjectID)
 POST    /tasks                controllers.TaskController.create()
 PUT     /tasks                controllers.TaskController.updateAll()
-PUT     /tasks/:id            controllers.TaskController.update(id: String)
-DELETE  /tasks/:id            controllers.TaskController.delete(id: String)
+PUT     /tasks/:id            controllers.TaskController.update(id: BSONObjectID)
+DELETE  /tasks/:id            controllers.TaskController.delete(id: BSONObjectID)
 DELETE  /tasks                controllers.TaskController.deleteAll()

@@ -17,6 +17,7 @@ libraryDependencies ++= Seq(
 
 )
 
+libraryDependencies += "io.sentry" % "sentry" % "1.7.16"
 
 lazy val root = (project in file("."))
   .enablePlugins(PlayScala)

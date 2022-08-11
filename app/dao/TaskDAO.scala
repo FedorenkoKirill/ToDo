@@ -3,7 +3,7 @@ import javax.inject._
 import reactivemongo.api.bson.collection.BSONCollection
 import play.modules.reactivemongo.ReactiveMongoApi
 import scala.concurrent.{ExecutionContext, Future}
-import models.{Task, CreateTask, UpdateTask}
+import models.{Task}
 import reactivemongo.api.{Cursor, ReadPreference}
 import reactivemongo.bson.{BSONDocument, BSONObjectID}
 import org.joda.time.DateTime
@@ -27,20 +27,20 @@ class TaskDAO @Inject()(
   }
 
   def findOne(id: BSONObjectID): Future[Option[Task]] = {
-    collection.flatMap(_.find(BSONDocument("_id" -> id), Option.empty[CreateTask]).one[Task])
+    collection.flatMap(_.find(BSONDocument("_id" -> id), Option.empty[Task]).one[Task])
   }
 
-  def create(task: Task): Future[WriteResult] = {
+  def create(label: String, done: Boolean, deleted: Boolean): Future[WriteResult] = {
     collection.flatMap(_.insert(BSONDocument(
-      "label" -> task.label,
-      "done" -> task.done,
-      "deleted" -> task.deleted
+      "label" -> label,
+      "done" -> done,
+      "deleted" -> deleted
     )))
   }
 
-  def update(done: Boolean):Future[Any] = {
+  def update(done: Boolean):Future[WriteResult] = {
     collection.flatMap(
-      _.findAndUpdate(BSONDocument(), BSONDocument("$set" -> BSONDocument("done" -> done)))
+      _.update(BSONDocument("done" -> true), BSONDocument("$set" -> BSONDocument("done" -> done)), multi = true)
       )
   }
 
@@ -59,7 +59,8 @@ class TaskDAO @Inject()(
       )
     )
   }
-  def delete():Future[Any] = {
+
+  def delete():Future[WriteResult] = {
     collection.flatMap(
       _.update(BSONDocument("done" -> true), BSONDocument("$set" -> BSONDocument("deleted" -> true)), multi = true)
     )

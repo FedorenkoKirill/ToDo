@@ -5,8 +5,8 @@ import play.api._
 import play.api.mvc._
 import play.api.libs.json._
 import models.{Task, CreateTask, UpdateTask}
+import services.TaskService
 import play.api.mvc._
-import dao.TaskDAO
 import scala.concurrent.ExecutionContext
 import reactivemongo.bson.BSONObjectID
 import play.api.libs.json.{Json, __}
@@ -18,81 +18,56 @@ import play.api.libs.json.JsValue
 @Singleton
 class TaskController @Inject()(
                                 implicit executionContext: ExecutionContext,
-                                val taskDAO: TaskDAO,
+                                val taskService: TaskService,
                                 val controllerComponents: ControllerComponents)
   extends BaseController {
 
-  def index() = Action { implicit request: Request[AnyContent] =>
+  def index() = Action {
     Redirect(routes.TaskController.findAll())
   }
 
-  def findAll(): Action[AnyContent] = Action.async { implicit request: Request[AnyContent] =>
-    taskDAO.findAll().map {
+  def findAll(): Action[AnyContent] = Action.async {
+    taskService.findAll.map {
       tasks => Ok(Json.toJson(tasks))
     }
   }
 
-  def findOne(id: String): Action[AnyContent] = Action.async { implicit request: Request[AnyContent] =>
-    val objectIdTryResult = BSONObjectID.parse(id)
-    objectIdTryResult match {
-      case Success(objectId) => taskDAO.findOne(objectId).map {
-        task => Ok(Json.toJson(task))
-      }
-      case Failure(_) => Future.successful(BadRequest("Cannot parse the task id"))
+  def findOne(id: BSONObjectID): Action[AnyContent] = Action.async {
+    taskService.findOne(id).map {
+      tasks => Ok(Json.toJson(tasks))
     }
   }
 
-  def create(): Action[JsValue] = Action.async(controllerComponents.parsers.json) { implicit request => {
-    request.body.validate[CreateTask].fold(
-      _ => Future.successful(BadRequest("Cannot parse request body")),
-      task =>
-        taskDAO.create(Task(_id = task._id, label = task.label, done = false, deleted = false) ).map {
-          _ => Created(Json.toJson(task))
-        }
-    )
-  }
-  }
-
-  def updateAll(): Action[JsValue] = Action.async(controllerComponents.parsers.json) { implicit request => {
-    request.body.validate[UpdateTask].fold(
-      _ => Future.successful(BadRequest("Cannot parse request body")),
-      task =>
-        taskDAO.update(task.done).map {
-          _ => Ok
-        }
-    )
-  }
-  }
-
-  def update(id: String): Action[JsValue] = Action.async(controllerComponents.parsers.json) { implicit request => {
-    val objectIdTryResult = BSONObjectID.parse(id)
-    objectIdTryResult match {
-      case Success(objectId) => request.body.validate[UpdateTask].fold(
-        _ => Future.successful(BadRequest("Cannot parse request body")),
-        task =>
-          taskDAO.update(objectId, task.done).map {
-            _ => Ok
-          }
-      )
-      case Failure(_) => Future.successful(BadRequest("Cannot parse the task id"))
+  def create(): Action[CreateTask] = Action(parse.json[CreateTask]).async { request =>
+    import request.{body => createTask}
+    taskService.create(createTask).map {
+      _ => Created
     }
   }
-  }
 
-  def delete(id: String): Action[AnyContent] = Action.async { implicit request => {
-    val objectIdTryResult = BSONObjectID.parse(id)
-    objectIdTryResult match {
-      case Success(objectId) => taskDAO.delete(objectId).map {
-        _ => Ok
-      }
-      case Failure(_) => Future.successful(BadRequest("Cannot parse the task id"))
+  def updateAll(): Action[UpdateTask] = Action(parse.json[UpdateTask]).async { request =>
+    import request.{body => updateTask}
+    taskService.update(updateTask).map {
+      _ => Ok
     }
   }
+
+  def update(id: BSONObjectID): Action[UpdateTask] = Action(parse.json[UpdateTask]).async { request =>
+    import request.{body => updateTask}
+    taskService.update(id, updateTask).map {
+      _ => Ok
+    }
   }
 
-  def deleteAll(): Action[AnyContent] = Action.async { implicit request => {
-    taskDAO.delete().map(
+  def delete(id: BSONObjectID): Action[AnyContent] = Action.async {
+    taskService.delete(id).map {
+      _ => Ok
+    }
+  }
+
+  def deleteAll(): Action[AnyContent] = Action.async {
+    taskService.delete().map(
       _ => Ok
     )
-  }}
+  }
 }
