@@ -10,6 +10,7 @@ import play.api.mvc._
 import scala.concurrent.ExecutionContext
 import reactivemongo.bson.BSONObjectID
 import play.api.libs.json.{Json, __}
+import dto.GetTasksResponse
 import scala.util.{Failure, Success}
 import scala.concurrent.{ExecutionContext, Future}
 import play.api.libs.json.JsValue
@@ -28,13 +29,13 @@ class TaskController @Inject()(
 
   def findAll(): Action[AnyContent] = Action.async {
     taskService.findAll.map {
-      tasks => Ok(Json.toJson(tasks))
+      tasks => Ok(Json.toJson(GetTasksResponse(tasks)))
     }
   }
 
   def findOne(id: String): Action[AnyContent] = Action.async {
     taskService.findOne(BSONObjectID.parse(id).get).map {
-      tasks => Ok(Json.toJson(tasks))
+      tasks => Ok(Json.toJson(GetTasksResponse(tasks.toSeq)))
     }
   }
 

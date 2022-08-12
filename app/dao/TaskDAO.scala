@@ -17,7 +17,7 @@ class TaskDAO @Inject()(reactiveMongoApi: ReactiveMongoApi)(implicit executionCo
 
   def findAll(limit: Int = 100): Future[Seq[Task]] = {
     collection.flatMap(
-      _.find(BSONDocument(), Option.empty[Task])
+      _.find(BSONDocument())
         .cursor[Task](ReadPreference.Primary)
         .collect[Seq](limit, Cursor.FailOnError[Seq[Task]]())
     )

@@ -15,10 +15,11 @@ case class Task(
                deleted: Boolean
                )
 
+trait TaskJson {
+  implicit val fmt : Format[CreateTask] = Json.format[CreateTask]
+}
 
-object Task {
-  implicit val fmt: Format[Task] = Json.format[Task]
-
+object Task extends TaskJson {
   implicit object TaskBSONReader extends BSONDocumentReader[Task] {
     def read(doc: BSONDocument): Task = {
       Task(
