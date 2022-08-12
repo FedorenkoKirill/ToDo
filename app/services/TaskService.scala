@@ -1,6 +1,7 @@
 package services
-import models.{CreateTask, Task, UpdateTask}
+import models.Task
 import dao.TaskDAO
+import dto.{CreateTask, UpdateTask}
 import play.api.mvc.{Action, AnyContent}
 import play.modules.reactivemongo.ReactiveMongoApi
 import play.mvc.BodyParser.Json

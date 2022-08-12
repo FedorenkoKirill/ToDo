@@ -1,4 +1,5 @@
-package models
+package dto
+
 import play.api.libs.json.{Format, Json}
 
 

@@ -4,13 +4,13 @@ import javax.inject._
 import play.api._
 import play.api.mvc._
 import play.api.libs.json._
-import models.{Task, CreateTask, UpdateTask}
+import models.Task
 import services.TaskService
 import play.api.mvc._
 import scala.concurrent.ExecutionContext
 import reactivemongo.bson.BSONObjectID
 import play.api.libs.json.{Json, __}
-import dto.GetTasksResponse
+import dto.{CreateTask, GetTasksResponse, UpdateTask}
 
 
 @Singleton
