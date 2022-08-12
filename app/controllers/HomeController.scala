@@ -32,8 +32,8 @@ class TaskController @Inject()(
     }
   }
 
-  def findOne(id: BSONObjectID): Action[AnyContent] = Action.async {
-    taskService.findOne(id).map {
+  def findOne(id: String): Action[AnyContent] = Action.async {
+    taskService.findOne(BSONObjectID.parse(id).get).map {
       tasks => Ok(Json.toJson(tasks))
     }
   }
@@ -47,26 +47,26 @@ class TaskController @Inject()(
 
   def updateAll(): Action[UpdateTask] = Action(parse.json[UpdateTask]).async { request =>
     import request.{body => updateTask}
-    taskService.update(updateTask).map {
+    taskService.updateAll(updateTask).map {
       _ => Ok
     }
   }
 
-  def update(id: BSONObjectID): Action[UpdateTask] = Action(parse.json[UpdateTask]).async { request =>
+  def update(id: String): Action[UpdateTask] = Action(parse.json[UpdateTask]).async { request =>
     import request.{body => updateTask}
-    taskService.update(id, updateTask).map {
+    taskService.update(BSONObjectID.parse(id).get, updateTask).map {
       _ => Ok
     }
   }
 
-  def delete(id: BSONObjectID): Action[AnyContent] = Action.async {
-    taskService.delete(id).map {
+  def delete(id: String): Action[AnyContent] = Action.async {
+    taskService.delete(BSONObjectID.parse(id).get).map {
       _ => Ok
     }
   }
 
   def deleteAll(): Action[AnyContent] = Action.async {
-    taskService.delete().map(
+    taskService.deleteAll().map(
       _ => Ok
     )
   }

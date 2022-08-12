@@ -14,10 +14,7 @@ import scala.concurrent.ExecutionContext
 
 
 @Singleton
-class TaskService @Inject()(
-                             implicit executionContext: ExecutionContext,
-                             val taskDAO: TaskDAO,
-                           ) {
+class TaskService @Inject()(val taskDAO: TaskDAO)(implicit executionContext: ExecutionContext) {
   def findAll: Future[Seq[Task]] = taskDAO.findAll()
 
   def findOne(objectId: BSONObjectID): Future[Option[Task]] = taskDAO.findOne(objectId)
@@ -26,11 +23,11 @@ class TaskService @Inject()(
     taskDAO.create(label = createTask.label, done = false, deleted = false)
   }
 
-  def update(task: UpdateTask): Future[WriteResult] = taskDAO.update(task.done)
+  def updateAll(task: UpdateTask): Future[WriteResult] = taskDAO.updateAll(task.done)
 
   def update(objectId: BSONObjectID, task: UpdateTask): Future[WriteResult] = taskDAO.update(objectId, task.done)
 
   def delete(objectId: BSONObjectID): Future[WriteResult] = taskDAO.delete(objectId)
 
-  def delete(): Future[WriteResult] = taskDAO.delete()
+  def deleteAll(): Future[WriteResult] = taskDAO.deleteAll()
 }

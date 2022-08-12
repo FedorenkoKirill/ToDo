@@ -38,7 +38,7 @@ class TaskDAO @Inject()(
     )))
   }
 
-  def update(done: Boolean):Future[WriteResult] = {
+  def updateAll(done: Boolean):Future[WriteResult] = {
     collection.flatMap(
       _.update(BSONDocument("done" -> true), BSONDocument("$set" -> BSONDocument("done" -> done)), multi = true)
       )
@@ -60,7 +60,7 @@ class TaskDAO @Inject()(
     )
   }
 
-  def delete():Future[WriteResult] = {
+  def deleteAll():Future[WriteResult] = {
     collection.flatMap(
       _.update(BSONDocument("done" -> true), BSONDocument("$set" -> BSONDocument("deleted" -> true)), multi = true)
     )

@@ -14,21 +14,4 @@ case class CreateTask(
 
 object CreateTask{
   implicit val fmt : Format[CreateTask] = Json.format[CreateTask]
-  implicit object TaskBSONReader extends BSONDocumentReader[CreateTask] {
-    def read(doc: BSONDocument): CreateTask = {
-      CreateTask(
-        doc.getAs[BSONObjectID]("_id"),
-        doc.getAs[String]("label").get
-      )
-    }
-  }
-
-  implicit object TaskBSONWriter extends BSONDocumentWriter[CreateTask] {
-    def write(task: CreateTask): BSONDocument = {
-      BSONDocument(
-        "_id" -> task._id,
-        "label" -> task.label,
-      )
-    }
-  }
 }
