@@ -11,10 +11,7 @@ import reactivemongo.api.commands.WriteResult
 
 
 @Singleton
-class TaskDAO @Inject()(
-                         implicit executionContext: ExecutionContext,
-                         reactiveMongoApi: ReactiveMongoApi
-                       ) {
+class TaskDAO @Inject()(reactiveMongoApi: ReactiveMongoApi)(implicit executionContext: ExecutionContext) {
 
   def collection: Future[BSONCollection] = reactiveMongoApi.database.map(db => db.collection("tasks"))
 

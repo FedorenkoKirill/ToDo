@@ -17,9 +17,9 @@ import play.api.libs.json.JsValue
 
 @Singleton
 class TaskController @Inject()(
-                                implicit executionContext: ExecutionContext,
                                 val taskService: TaskService,
-                                val controllerComponents: ControllerComponents)
+                                val controllerComponents: ControllerComponents
+                              )(implicit executionContext: ExecutionContext)
   extends BaseController {
 
   def index() = Action {
