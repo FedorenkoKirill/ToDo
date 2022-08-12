@@ -11,9 +11,6 @@ import scala.concurrent.ExecutionContext
 import reactivemongo.bson.BSONObjectID
 import play.api.libs.json.{Json, __}
 import dto.GetTasksResponse
-import scala.util.{Failure, Success}
-import scala.concurrent.{ExecutionContext, Future}
-import play.api.libs.json.JsValue
 
 
 @Singleton

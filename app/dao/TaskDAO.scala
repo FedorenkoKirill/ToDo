@@ -6,7 +6,6 @@ import scala.concurrent.{ExecutionContext, Future}
 import models.{Task}
 import reactivemongo.api.{Cursor, ReadPreference}
 import reactivemongo.bson.{BSONDocument, BSONObjectID}
-import org.joda.time.DateTime
 import reactivemongo.api.commands.WriteResult
 
 
