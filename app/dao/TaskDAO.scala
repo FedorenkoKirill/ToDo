@@ -4,8 +4,9 @@ import reactivemongo.api.bson.collection.BSONCollection
 import play.modules.reactivemongo.ReactiveMongoApi
 import scala.concurrent.{ExecutionContext, Future}
 import models.{Task}
+import dto.TaskDto
 import reactivemongo.api.{Cursor, ReadPreference}
-import reactivemongo.bson.{BSONDocument, BSONObjectID}
+import reactivemongo.api.bson.{BSONDocument, BSONObjectID}
 import reactivemongo.api.commands.WriteResult
 
 
@@ -26,11 +27,12 @@ class TaskDAO @Inject()(reactiveMongoApi: ReactiveMongoApi)(implicit executionCo
     collection.flatMap(_.find(BSONDocument("_id" -> id), Option.empty[Task]).one[Task])
   }
 
-  def create(label: String, done: Boolean, deleted: Boolean): Future[WriteResult] = {
+  def create(task: Task): Future[WriteResult] = {
     collection.flatMap(_.insert(BSONDocument(
-      "label" -> label,
-      "done" -> done,
-      "deleted" -> deleted
+      "_id" -> task.id,
+      "label" -> task.label,
+      "done" -> task.done,
+      "deleted" -> task.deleted
     )))
   }
 

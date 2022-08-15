@@ -1,19 +1,20 @@
 package models
 
-import play.api.libs.json.{Format, Json}
-import reactivemongo.play.json._
-import reactivemongo.api.bson.{BSONDocumentHandler, Macros}
+import dto.TaskDto
+import reactivemongo.api.bson.{BSONDocumentHandler, BSONObjectID, Macros}
+import reactivemongo.api.bson.Macros.Annotations.Key
 
 case class Task(
+               @Key("_id") id: BSONObjectID,
                label: String,
                done: Boolean,
                deleted: Boolean
-               )
+               ){
+  def taskModelToDto(model: Task): TaskDto = TaskDto(id = model.id.toString(), label = model.label)
+}
 
-
-trait TaskWrites {
-  implicit val writesJson : Format[Task] = Json.format[Task]
+trait TaskBson {
   implicit val writesBson : BSONDocumentHandler[Task] = Macros.handler[Task]
 }
 
-object Task extends TaskWrites
+object Task extends TaskBson

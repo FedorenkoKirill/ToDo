@@ -8,7 +8,7 @@ import models.Task
 import services.TaskService
 import play.api.mvc._
 import scala.concurrent.ExecutionContext
-import reactivemongo.bson.BSONObjectID
+import reactivemongo.api.bson.BSONObjectID
 import play.api.libs.json.{Json, __}
 import dto.{CreateTask, GetTasksResponse, UpdateTask}
 
