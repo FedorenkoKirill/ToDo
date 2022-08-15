@@ -7,10 +7,11 @@ import play.api.libs.json._
 import models.Task
 import services.TaskService
 import play.api.mvc._
+
 import scala.concurrent.ExecutionContext
 import reactivemongo.api.bson.BSONObjectID
 import play.api.libs.json.{Json, __}
-import dto.{CreateTask, GetTasksResponse, UpdateTask}
+import dto.{CreateTask, GetTasksResponse, TaskDto, UpdateTask}
 
 
 @Singleton
@@ -32,7 +33,8 @@ class TaskController @Inject()(
 
   def findOne(id: String): Action[AnyContent] = Action.async {
     taskService.findOne(BSONObjectID.parse(id).get).map {
-      tasks => Ok(Json.toJson(GetTasksResponse(tasks.toSeq)))
+      case Some(task: TaskDto) => Ok(Json.toJson(GetTasksResponse(Seq(task))))
+      case None => NotFound
     }
   }
 

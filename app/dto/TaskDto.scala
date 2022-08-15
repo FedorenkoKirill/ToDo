@@ -4,7 +4,7 @@ import play.api.libs.json.{Format, Json}
 import reactivemongo.api.bson.Macros.Annotations.Key
 
 case class TaskDto (
-                @Key("_id") id: String,
+                id: String,
                 label: String
               )
 
