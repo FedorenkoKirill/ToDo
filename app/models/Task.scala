@@ -9,9 +9,7 @@ case class Task(
                label: String,
                done: Boolean,
                deleted: Boolean
-               ){
-  def taskModelToDto(model: Task): TaskDto = TaskDto(id = model.id.toString(), label = model.label)
-}
+               )
 
 trait TaskBson {
   implicit val writesBson : BSONDocumentHandler[Task] = Macros.handler[Task]

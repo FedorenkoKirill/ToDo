@@ -17,10 +17,13 @@ import scala.concurrent.ExecutionContext
 
 @Singleton
 class TaskService @Inject()(val taskDAO: TaskDAO)(implicit executionContext: ExecutionContext) {
-  def findAll: Future[Seq[TaskDto]] = taskDAO.findAll().map(_.map(task => task.taskModelToDto(task)))
+
+  def taskModelToDto(model: Task): TaskDto = TaskDto(id = model.id.toString(), label = model.label)
+
+  def findAll: Future[Seq[TaskDto]] = taskDAO.findAll().map(_.map(taskModelToDto))
 
   def findOne(objectId: BSONObjectID): Future[Option[TaskDto]] =
-    taskDAO.findOne(objectId).map(_.map(task => task.taskModelToDto(task)))
+    taskDAO.findOne(objectId).map(_.map(taskModelToDto))
 
   def create(createTask: CreateTask): Future[WriteResult] = {
     taskDAO.create(Task(id = BSONObjectID.generate(), label = createTask.label, done = false, deleted = false))
