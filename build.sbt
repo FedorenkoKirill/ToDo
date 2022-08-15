@@ -2,9 +2,7 @@ ThisBuild / scalaVersion := "2.13.8"
 
 ThisBuild / version := "1.0-SNAPSHOT"
 
-import play.sbt.routes.RoutesKeys
-
-RoutesKeys.routesImport += "play.modules.reactivemongo.PathBindables._"
+play.sbt.routes.RoutesKeys.routesImport += "play.modules.reactivemongo.PathBindables._"
 
 libraryDependencies ++= Seq(
   // Enable reactive mongo for Play 2.8
