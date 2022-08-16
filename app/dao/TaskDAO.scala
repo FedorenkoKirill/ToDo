@@ -4,7 +4,6 @@ import reactivemongo.api.bson.collection.BSONCollection
 import play.modules.reactivemongo.ReactiveMongoApi
 import scala.concurrent.{ExecutionContext, Future}
 import models.{Task}
-import dto.TaskDto
 import reactivemongo.api.{Cursor, ReadPreference}
 import reactivemongo.api.bson.{BSONDocument, BSONObjectID}
 import reactivemongo.api.commands.WriteResult

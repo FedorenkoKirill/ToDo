@@ -1,7 +1,6 @@
 package dto
 
 import play.api.libs.json.{Format, Json}
-import reactivemongo.api.bson.Macros.Annotations.Key
 
 case class TaskDto (
                 id: String,

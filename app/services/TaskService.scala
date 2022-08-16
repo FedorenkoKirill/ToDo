@@ -3,16 +3,12 @@ import models.Task
 import dto.TaskDto
 import dao.TaskDAO
 import dto.{CreateTask, UpdateTask}
-import play.api.mvc.{Action, AnyContent}
-import play.modules.reactivemongo.ReactiveMongoApi
-import play.mvc.BodyParser.Json
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 import reactivemongo.api.commands.WriteResult
 import reactivemongo.api.bson.BSONObjectID
 
-import javax.inject.{Inject, Singleton}
-import scala.concurrent.ExecutionContext
 
 
 @Singleton

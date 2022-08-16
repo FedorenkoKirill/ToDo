@@ -1,12 +1,8 @@
 package controllers
 
 import javax.inject._
-import play.api._
 import play.api.mvc._
-import play.api.libs.json._
-import models.Task
 import services.TaskService
-import play.api.mvc._
 
 import scala.concurrent.ExecutionContext
 import reactivemongo.api.bson.BSONObjectID
@@ -48,26 +44,26 @@ class TaskController @Inject()(
   def updateAll(): Action[UpdateTask] = Action(parse.json[UpdateTask]).async { request =>
     import request.{body => updateTask}
     taskService.updateAll(updateTask).map {
-      _ => Ok
+      _ => NoContent
     }
   }
 
   def update(id: BSONObjectID): Action[UpdateTask] = Action(parse.json[UpdateTask]).async { request =>
     import request.{body => updateTask}
     taskService.update(id, updateTask).map {
-      _ => Ok
+      _ => NoContent
     }
   }
 
   def delete(id: BSONObjectID): Action[AnyContent] = Action.async {
     taskService.delete(id).map {
-      _ => Ok
+      _ => NoContent
     }
   }
 
   def deleteAll(): Action[AnyContent] = Action.async {
     taskService.deleteAll().map(
-      _ => Ok
+      _ => NoContent
     )
   }
 }

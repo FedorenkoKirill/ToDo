@@ -1,6 +1,5 @@
 package models
 
-import dto.TaskDto
 import reactivemongo.api.bson.{BSONDocumentHandler, BSONObjectID, Macros}
 import reactivemongo.api.bson.Macros.Annotations.Key
 
