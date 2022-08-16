@@ -16,14 +16,14 @@ class TaskDAO @Inject()(reactiveMongoApi: ReactiveMongoApi)(implicit executionCo
 
   def findAll(limit: Int = 100): Future[Seq[Task]] = {
     collection.flatMap(
-      _.find(BSONDocument(), Option.empty[Task])
+      _.find(BSONDocument("deleted" -> false), Option.empty[Task])
         .cursor[Task](ReadPreference.Primary)
         .collect[Seq](limit, Cursor.FailOnError[Seq[Task]]())
     )
   }
 
   def findOne(id: BSONObjectID): Future[Option[Task]] = {
-    collection.flatMap(_.find(BSONDocument("_id" -> id), Option.empty[Task]).one[Task])
+    collection.flatMap(_.find(BSONDocument("_id" -> id, "deleted" -> false), Option.empty[Task]).one[Task])
   }
 
   def create(task: Task): Future[WriteResult] = {
