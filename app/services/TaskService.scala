@@ -1,4 +1,5 @@
 package services
+
 import models.Task
 import dto.TaskDto
 import dao.TaskDAO
@@ -8,8 +9,6 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 import reactivemongo.api.commands.WriteResult
 import reactivemongo.api.bson.BSONObjectID
-
-
 
 @Singleton
 class TaskService @Inject()(val taskDAO: TaskDAO)(implicit executionContext: ExecutionContext) {

@@ -1,4 +1,5 @@
 package dao
+
 import javax.inject._
 import reactivemongo.api.bson.collection.BSONCollection
 import play.modules.reactivemongo.ReactiveMongoApi
@@ -7,7 +8,6 @@ import models.{Task}
 import reactivemongo.api.{Cursor, ReadPreference}
 import reactivemongo.api.bson.{BSONDocument, BSONObjectID}
 import reactivemongo.api.commands.WriteResult
-
 
 @Singleton
 class TaskDAO @Inject()(reactiveMongoApi: ReactiveMongoApi)(implicit executionContext: ExecutionContext) {
@@ -35,21 +35,21 @@ class TaskDAO @Inject()(reactiveMongoApi: ReactiveMongoApi)(implicit executionCo
     )))
   }
 
-  def updateAll(done: Boolean):Future[WriteResult] = {
+  def updateAll(done: Boolean): Future[WriteResult] = {
     collection.flatMap(
       _.update(BSONDocument("done" -> true), BSONDocument("$set" -> BSONDocument("done" -> done)), multi = true)
-      )
+    )
   }
 
-  def update(id: BSONObjectID, done: Boolean):Future[WriteResult] = {
-      collection.flatMap(
+  def update(id: BSONObjectID, done: Boolean): Future[WriteResult] = {
+    collection.flatMap(
       _.update(ordered = false).one(BSONDocument("_id" -> id),
         BSONDocument("$set" -> BSONDocument("done" -> done))
       )
     )
   }
 
-  def delete(id: BSONObjectID):Future[WriteResult] = {
+  def delete(id: BSONObjectID): Future[WriteResult] = {
     collection.flatMap(
       _.update(ordered = false).one(BSONDocument("_id" -> id),
         BSONDocument("$set" -> BSONDocument("deleted" -> true))
@@ -57,7 +57,7 @@ class TaskDAO @Inject()(reactiveMongoApi: ReactiveMongoApi)(implicit executionCo
     )
   }
 
-  def deleteAll():Future[WriteResult] = {
+  def deleteAll(): Future[WriteResult] = {
     collection.flatMap(
       _.update(BSONDocument("done" -> true), BSONDocument("$set" -> BSONDocument("deleted" -> true)), multi = true)
     )

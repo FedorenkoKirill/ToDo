@@ -9,12 +9,11 @@ import reactivemongo.api.bson.BSONObjectID
 import play.api.libs.json.{Json, __}
 import dto.{CreateTask, GetTasksResponse, TaskDto, UpdateTask}
 
-
 @Singleton
 class TaskController @Inject()(
-                                val taskService: TaskService,
-                                val controllerComponents: ControllerComponents
-                              )(implicit executionContext: ExecutionContext)
+  val taskService: TaskService,
+  val controllerComponents: ControllerComponents
+)(implicit executionContext: ExecutionContext)
   extends BaseController {
 
   def index() = Action {
