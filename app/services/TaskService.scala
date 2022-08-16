@@ -18,7 +18,7 @@ import scala.concurrent.ExecutionContext
 @Singleton
 class TaskService @Inject()(val taskDAO: TaskDAO)(implicit executionContext: ExecutionContext) {
 
-  def taskModelToDto(model: Task): TaskDto = TaskDto(id = model.id.toString(), label = model.label)
+  def taskModelToDto(model: Task): TaskDto = TaskDto(id = model.id.stringify, label = model.label)
 
   def findAll: Future[Seq[TaskDto]] = taskDAO.findAll().map(_.map(taskModelToDto))
 
