@@ -3,7 +3,7 @@ package dto
 import play.api.libs.json.{Format, Json}
 
 case class UpdateTask(
-  done: Boolean,
+  done: Boolean
 )
 
 trait UpdateTaskJson {

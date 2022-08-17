@@ -11,7 +11,9 @@ import reactivemongo.api.commands.WriteResult
 import reactivemongo.api.bson.BSONObjectID
 
 @Singleton
-class TaskService @Inject()(val taskDAO: TaskDAO)(implicit executionContext: ExecutionContext) {
+class TaskService @Inject()(
+  val taskDAO: TaskDAO
+)(implicit executionContext: ExecutionContext) {
 
   def taskModelToDto(model: Task): TaskDto = TaskDto(id = model.id.stringify, label = model.label)
 

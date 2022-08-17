@@ -13,8 +13,7 @@ import dto.{CreateTask, GetTasksResponse, TaskDto, UpdateTask}
 class TaskController @Inject()(
   val taskService: TaskService,
   val controllerComponents: ControllerComponents
-)(implicit executionContext: ExecutionContext)
-  extends BaseController {
+)(implicit executionContext: ExecutionContext) extends BaseController {
 
   def index() = Action {
     Redirect(routes.TaskController.findAll())
